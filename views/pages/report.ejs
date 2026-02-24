@@ -1,0 +1,163 @@
+<% layout('/layouts/boilerplate.ejs') -%>
+
+<form 
+  action="/report" 
+  method="POST" 
+  enctype="multipart/form-data"
+>
+
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">📋 &nbsp;Citizen Portal</div>
+      <h1>Report a Civic Issue</h1>
+      <p>Help your city improve — report problems, attach evidence, and track resolution in real time.</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="section-label">Select Issue Type</div>
+
+    <!-- Hidden category input -->
+    <input type="hidden" name="category" id="categoryInput" value="water">
+
+    <div class="issue-types">
+      <div class="issue-card selected" data-type="water">
+        <div class="card-img">💧</div>
+        <div class="card-label">Water Leakage</div>
+      </div>
+      <div class="issue-card" data-type="garbage">
+        <div class="card-img">🗑️</div>
+        <div class="card-label">Garbage Dump</div>
+      </div>
+      <div class="issue-card" data-type="streetlight">
+        <div class="card-img">💡</div>
+        <div class="card-label">Street Light Outage</div>
+      </div>
+      <div class="issue-card" data-type="pothole">
+        <div class="card-img">🕳️</div>
+        <div class="card-label">Pothole</div>
+      </div>
+      <div class="issue-card" data-type="drainage">
+        <div class="card-img">🚰</div>
+        <div class="card-label">Drainage / Sewage</div>
+      </div>
+    </div>
+
+    <div class="form-grid">
+
+      <!-- Column 1: Image Upload -->
+      <div class="form-card">
+        <div class="card-header">
+          <div class="card-icon g">📷</div>
+          <div>
+            <div class="card-title">Upload Live Photo</div>
+            <div class="card-sub">Attach a photo of the issue</div>
+          </div>
+        </div>
+
+        <div class="upload-zone">
+          <input 
+            type="file" 
+            id="photoInput" 
+            name="image"
+            accept="image/*" 
+            capture="environment"
+            required
+          >
+          <div class="uz-icon">📁</div>
+          <div class="uz-text">
+            Drag & drop or click to upload<br>
+            <span style="color:#b0c0b2;font-size:0.67rem;">JPG, PNG, HEIC supported</span>
+          </div>
+          <button class="uz-btn" type="button">Browse Files</button>
+        </div>
+
+        <div class="preview-wrap" id="previewWrap">
+          <img id="previewImg" src="" alt="preview">
+          <button class="remove-img" id="removeImg" type="button">✕</button>
+        </div>
+
+        <div class="cam-row">
+          <button class="cam-btn" type="button" onclick="openCamera()">📸 Take Live Photo</button>
+        </div>
+      </div>
+
+      <!-- Column 2: Location -->
+      <div class="form-card">
+        <div class="card-header">
+          <div class="card-icon b">📍</div>
+          <div>
+            <div class="card-title">Live GPS Location</div>
+            <div class="card-sub">Auto-detected from your device</div>
+          </div>
+        </div>
+
+        <div class="gps-box">
+          <div class="gps-map">
+            <div class="map-grid"></div>
+            <div class="map-pin"></div>
+          </div>
+          <div class="gps-coords">
+            <span>LAT</span><span id="latVal">Detecting…</span>
+            &nbsp;&nbsp;
+            <span>LNG</span><span id="lngVal">—</span>
+          </div>
+        </div>
+
+        <button class="gps-refresh" type="button" onclick="getLocation()">
+          <div class="gps-dot"></div> Refresh My Location
+        </button>
+
+        <label class="manual-label">Or enter manually</label>
+        <input 
+          class="manual-input" 
+          type="text" 
+          placeholder="Street address, landmark, area…"
+        >
+      </div>
+
+      <!-- Column 3: Description -->
+      <div class="form-card">
+        <div class="card-header">
+          <div class="card-icon o">✏️</div>
+          <div>
+            <div class="card-title">Describe the Issue</div>
+            <div class="card-sub">Type or speak your complaint</div>
+          </div>
+        </div>
+
+        <div class="desc-wrap">
+          <textarea 
+            id="description"
+            name="description"
+            placeholder="Describe the issue in detail — what happened, when, and how severe…"
+            required
+          ></textarea>
+
+          <button 
+            class="stt-btn" 
+            id="sttBtn" 
+            type="button"
+            title="Tap to speak" 
+            onclick="toggleSTT()"
+          >🎙️</button>
+        </div>
+
+        <div class="stt-hint" id="sttHint">Tap 🎙️ for voice input</div>
+
+        <button type="submit" class="submit-btn">
+          🚨 &nbsp;Submit Complaint
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</form>
+
+<!-- Toast (UI only) -->
+<div class="toast" id="toast">✅ Complaint submitted successfully!</div>
+

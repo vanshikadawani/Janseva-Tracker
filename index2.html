@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JanSeva Tracker – Report Issue</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #2d7a3a;
+    --green-hover: #256831;
+    --orange: #f97316;
+    --bg: #f4f6f5;
+    --white: #ffffff;
+    --border: #e2e8e3;
+    --text: #1a2e1c;
+    --muted: #6b7f6e;
+    --blue: #3b82f6;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 64px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: var(--green);
+    display: flex; align-items: center; justify-content: center; font-size: 17px;
+  }
+  .nav-logo span { font-weight: 700; font-size: 1.05rem; color: #111; }
+  .nav-links { display: flex; align-items: center; gap: 36px; }
+  .nav-links a { text-decoration: none; color: #4b5563; font-size: 0.88rem; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--green); }
+
+  /* PAGE */
+  .page { padding-top: 64px; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #1c3d20 0%, #2d5c34 50%, #1a3a1f 100%);
+    padding: 48px 48px 36px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 280px; height: 280px; border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .hero-inner { position: relative; z-index: 1; max-width: 560px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 100px; padding: 4px 12px;
+    font-size: 0.7rem; font-weight: 600; color: #a7f3b0;
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px;
+  }
+  .hero h1 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 800; color: #fff; line-height: 1.15; margin-bottom: 8px; }
+  .hero p { color: rgba(255,255,255,0.6); font-size: 0.9rem; }
+
+  /* CONTENT */
+  .content { padding: 32px 48px 48px; }
+
+  .section-label {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.09em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+  }
+
+  /* ISSUE TYPES */
+  .issue-types {
+    display: flex; gap: 16px; padding-bottom: 4px;
+    margin-bottom: 28px;
+  }
+  .issue-card {
+    flex: 1; min-width: 0;
+    border-radius: 14px; border: 2px solid var(--border);
+    background: var(--white); cursor: pointer;
+    transition: all 0.2s ease; overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .issue-card:hover { border-color: #a3c4a8; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(45,122,58,0.12); }
+  .issue-card.selected { border-color: var(--green); background: #f0f9f1; box-shadow: 0 4px 14px rgba(45,122,58,0.18); }
+  .card-img { width: 100%; height: 72px; display: flex; align-items: center; justify-content: center; font-size: 2rem; background: #f9fafb; }
+  .issue-card.selected .card-img { background: #e8f5ea; }
+  .card-label { padding: 8px 8px 10px; font-size: 0.72rem; font-weight: 600; line-height: 1.35; color: var(--text); text-align: center; }
+  .issue-card.selected .card-label { color: var(--green); }
+
+  /* FORM GRID */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+  .form-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 18px; padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .card-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+  .card-icon.g { background: #e8f5ea; }
+  .card-icon.b { background: #eff6ff; }
+  .card-icon.o { background: #fff7ed; }
+  .card-title { font-size: 0.9rem; font-weight: 700; }
+  .card-sub { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+
+  /* Upload */
+  .upload-zone {
+    border: 2px dashed #c8daca; border-radius: 12px; background: #f8fbf8;
+    height: 148px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 6px;
+    cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
+  }
+  .upload-zone:hover { border-color: var(--green); background: #f0f9f1; }
+  .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .uz-icon { font-size: 1.8rem; }
+  .uz-text { font-size: 0.73rem; color: var(--muted); text-align: center; line-height: 1.5; }
+  .uz-btn {
+    background: var(--green); color: #fff; border: none; border-radius: 8px;
+    padding: 6px 16px; font-size: 0.7rem; font-weight: 600; cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif; margin-top: 2px;
+  }
+  .cam-row { display: flex; gap: 8px; margin-top: 12px; }
+  .cam-btn {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px;
+    background: #f4f6f5; border: 1px solid var(--border); border-radius: 9px; padding: 9px 6px;
+    font-size: 0.7rem; font-weight: 500; color: var(--text);
+    cursor: pointer; transition: all 0.2s; font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .cam-btn:hover { background: #e8f5ea; border-color: #a3c4a8; color: var(--green); }
+
+  .preview-wrap { display: none; margin-top: 10px; border-radius: 10px; overflow: hidden; position: relative; }
+  .preview-wrap img { width: 100%; height: 90px; object-fit: cover; }
+  .remove-img {
+    position: absolute; top: 5px; right: 5px; width: 22px; height: 22px;
+    border-radius: 50%; background: rgba(0,0,0,0.55); border: none;
+    color: #fff; font-size: 11px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* GPS */
+  .gps-box { border: 1px solid #dbeafe; border-radius: 12px; overflow: hidden; margin-bottom: 12px; background: #f0f7ff; }
+  .gps-map {
+    height: 118px; background: linear-gradient(135deg, #e0f2fe 0%, #bfdbfe 100%);
+    display: flex; align-items: center; justify-content: center; position: relative;
+  }
+  .map-grid {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+  .map-pin {
+    position: relative; z-index: 1; width: 30px; height: 30px;
+    border-radius: 50% 50% 50% 0; background: #3b82f6; transform: rotate(-45deg);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 8px rgba(59,130,246,0.15);
+    animation: pin-pulse 2s ease-in-out infinite;
+  }
+  .map-pin::after { content:''; position:absolute; border-radius:50%; width:12px; height:12px; background:#fff; }
+  @keyframes pin-pulse { 0%,100%{box-shadow:0 0 0 8px rgba(59,130,246,0.15)} 50%{box-shadow:0 0 0 16px rgba(59,130,246,0.05)} }
+  .gps-coords { padding: 9px 12px; font-size: 0.7rem; color: #2563eb; font-weight: 600; letter-spacing: 0.03em; }
+  .gps-coords span { color: #93c5fd; margin-right: 3px; font-weight: 400; }
+
+  .gps-refresh {
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 7px;
+    background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 9px; padding: 10px;
+    font-size: 0.76rem; font-weight: 600; color: #2563eb; cursor: pointer;
+    transition: all 0.2s; font-family: 'Plus Jakarta Sans', sans-serif; margin-bottom: 14px;
+  }
+  .gps-refresh:hover { background: #dbeafe; }
+  .gps-dot { width: 7px; height: 7px; border-radius: 50%; background: #3b82f6; animation: blink 1.2s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  .manual-label { font-size: 0.68rem; color: var(--muted); font-weight: 600; margin-bottom: 6px; display: block; }
+  .manual-input {
+    width: 100%; background: #f4f6f5; border: 1px solid var(--border);
+    border-radius: 9px; padding: 10px 13px; color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8rem; outline: none; transition: border-color 0.2s;
+  }
+  .manual-input::placeholder { color: #9cad9e; }
+  .manual-input:focus { border-color: var(--blue); background: #fff; }
+
+  /* Description */
+  .desc-wrap { position: relative; margin-bottom: 8px; }
+  textarea {
+    width: 100%; height: 152px;
+    background: #f9fafb; border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 44px 12px 13px;
+    color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.82rem; line-height: 1.6; resize: none; outline: none; transition: border-color 0.2s;
+  }
+  textarea::placeholder { color: #9cad9e; }
+  textarea:focus { border-color: #f97316; background: #fff; }
+  .stt-btn {
+    position: absolute; bottom: 10px; right: 10px;
+    width: 30px; height: 30px; border-radius: 8px; background: var(--orange); border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s; font-size: 0.9rem; color: #fff;
+  }
+  .stt-btn:hover { background: #ea6c0a; }
+  .stt-btn.recording { background: #ef4444; animation: rec-pulse 1s infinite; }
+  @keyframes rec-pulse { 0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.4)} 50%{box-shadow:0 0 0 7px rgba(239,68,68,0)} }
+  .stt-hint { font-size: 0.68rem; color: var(--muted); text-align: right; margin-bottom: 18px; }
+
+  .submit-btn {
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, var(--orange) 0%, #ea580c 100%);
+    border: none; border-radius: 12px; color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; transition: all 0.22s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    box-shadow: 0 4px 14px rgba(249,115,22,0.3);
+  }
+  .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(249,115,22,0.4); }
+  .submit-btn:active { transform: translateY(0); }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: var(--green); color: #fff; padding: 13px 26px; border-radius: 100px;
+    font-size: 0.84rem; font-weight: 600; box-shadow: 0 6px 24px rgba(45,122,58,0.35);
+    transition: transform 0.38s cubic-bezier(0.34,1.56,0.64,1); z-index: 999;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 900px) {
+    .form-grid { grid-template-columns: 1fr; }
+    nav, .hero, .content { padding-left: 20px; padding-right: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-icon">🏙️</div>
+    <span>JanSeva Tracker</span>
+  </a>
+  <div class="nav-links">
+    <a href="#">Home</a>
+    <a href="#" class="active">My Complaints</a>
+    <a href="#">How to Report</a>
+    <a href="#">Contact Us</a>
+    <a href="#">FAQ</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">📋 &nbsp;Citizen Portal</div>
+      <h1>Report a Civic Issue</h1>
+      <p>Help your city improve — report problems, attach evidence, and track resolution in real time.</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="section-label">Select Issue Type</div>
+    <div class="issue-types">
+      <div class="issue-card selected" data-type="water"><div class="card-img">💧</div><div class="card-label">Water Leakage</div></div>
+      <div class="issue-card" data-type="garbage"><div class="card-img">🗑️</div><div class="card-label">Garbage Dump</div></div>
+      <div class="issue-card" data-type="streetlight"><div class="card-img">💡</div><div class="card-label">Street Light Outage</div></div>
+      <div class="issue-card" data-type="pothole"><div class="card-img">🕳️</div><div class="card-label">Pothole</div></div>
+      <div class="issue-card" data-type="drainage"><div class="card-img">🚰</div><div class="card-label">Drainage / Sewage</div></div>
+    </div>
+
+    <div class="form-grid">
+
+      <!-- Col 1: Photo -->
+      <div class="form-card">
+        <div class="card-header">
+          <div class="card-icon g">📷</div>
+          <div><div class="card-title">Upload Live Photo</div><div class="card-sub">Attach a photo of the issue</div></div>
+        </div>
+        <div class="upload-zone">
+          <input type="file" id="photoInput" accept="image/*" capture="environment">
+          <div class="uz-icon">📁</div>
+          <div class="uz-text">Drag & drop or click to upload<br><span style="color:#b0c0b2;font-size:0.67rem;">JPG, PNG, HEIC supported</span></div>
+          <button class="uz-btn" type="button">Browse Files</button>
+        </div>
+        <div class="preview-wrap" id="previewWrap">
+          <img id="previewImg" src="" alt="preview">
+          <button class="remove-img" id="removeImg" type="button">✕</button>
+        </div>
+        <div class="cam-row">
+          <button class="cam-btn" onclick="openCamera()" style="flex:1;">📸 Take Live Photo</button>
+        </div>
+      </div>
+
+      <!-- Col 2: GPS -->
+      <div class="form-card">
+        <div class="card-header">
+          <div class="card-icon b">📍</div>
+          <div><div class="card-title">Live GPS Location</div><div class="card-sub">Auto-detected from your device</div></div>
+        </div>
+        <div class="gps-box">
+          <div class="gps-map">
+            <div class="map-grid"></div>
+            <div class="map-pin"></div>
+          </div>
+          <div class="gps-coords">
+            <span>LAT</span><span id="latVal">Detecting…</span>
+            &nbsp;&nbsp;
+            <span>LNG</span><span id="lngVal">—</span>
+          </div>
+        </div>
+        <button class="gps-refresh" onclick="getLocation()">
+          <div class="gps-dot"></div> Refresh My Location
+        </button>
+        <label class="manual-label">Or enter manually</label>
+        <input class="manual-input" type="text" id="manualAddr" placeholder="Street address, landmark, area…">
+      </div>
+
+      <!-- Col 3: Description -->
+      <div class="form-card">
+        <div class="card-header">
+          <div class="card-icon o">✏️</div>
+          <div><div class="card-title">Describe the Issue</div><div class="card-sub">Type or speak your complaint</div></div>
+        </div>
+        <div class="desc-wrap">
+          <textarea id="description" placeholder="Describe the issue in detail — what happened, when, and how severe…"></textarea>
+          <button class="stt-btn" id="sttBtn" title="Tap to speak" onclick="toggleSTT()">🎙️</button>
+        </div>
+        <div class="stt-hint" id="sttHint">Tap 🎙️ for voice input</div>
+        <button class="submit-btn" onclick="submitComplaint()">🚨 &nbsp;Submit Complaint</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">✅ Complaint submitted successfully!</div>
+
+<script>
+  document.querySelectorAll('.issue-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.issue-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+    });
+  });
+
+  function getLocation() {
+    document.getElementById('latVal').textContent = 'Detecting…';
+    document.getElementById('lngVal').textContent = '—';
+    if (!navigator.geolocation) { document.getElementById('latVal').textContent = '21.14631'; document.getElementById('lngVal').textContent = '79.08491'; return; }
+    navigator.geolocation.getCurrentPosition(
+      pos => { document.getElementById('latVal').textContent = pos.coords.latitude.toFixed(5); document.getElementById('lngVal').textContent = pos.coords.longitude.toFixed(5); },
+      () => { document.getElementById('latVal').textContent = '21.14631'; document.getElementById('lngVal').textContent = '79.08491'; }
+    );
+  }
+  getLocation();
+
+  const photoInput = document.getElementById('photoInput');
+  photoInput.addEventListener('change', e => {
+    const file = e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => { document.getElementById('previewImg').src = ev.target.result; document.getElementById('previewWrap').style.display = 'block'; };
+    reader.readAsDataURL(file);
+  });
+  document.getElementById('removeImg').addEventListener('click', () => {
+    document.getElementById('previewImg').src = ''; document.getElementById('previewWrap').style.display = 'none'; photoInput.value = '';
+  });
+  function openCamera() { photoInput.setAttribute('capture','environment'); photoInput.click(); }
+  function openGallery() { photoInput.removeAttribute('capture'); photoInput.click(); }
+
+  let recognition = null, isRecording = false;
+  function toggleSTT() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { alert('Voice input not supported. Please use Chrome.'); return; }
+    const btn = document.getElementById('sttBtn'), hint = document.getElementById('sttHint');
+    if (isRecording) { recognition.stop(); return; }
+    recognition = new SR();
+    recognition.lang = 'en-IN'; recognition.continuous = true; recognition.interimResults = true;
+    recognition.onstart = () => { isRecording = true; btn.classList.add('recording'); btn.textContent = '🔴'; hint.textContent = 'Listening… tap 🔴 to stop'; };
+    recognition.onresult = e => { let t = ''; for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript; document.getElementById('description').value = t; };
+    recognition.onend = () => { isRecording = false; btn.classList.remove('recording'); btn.textContent = '🎙️'; hint.textContent = 'Voice input captured ✓'; };
+    recognition.start();
+  }
+
+  function submitComplaint() {
+    const desc = document.getElementById('description').value.trim();
+    const addr = document.getElementById('manualAddr').value.trim();
+    if (!document.querySelector('.issue-card.selected')) { alert('Please select an issue type.'); return; }
+    if (!desc && !addr) { alert('Please describe the issue or enter a location.'); return; }
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+  }
+</script>
+</body>
+</html>
