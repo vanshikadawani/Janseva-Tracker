@@ -45,16 +45,17 @@ app.post("/report", upload.single("image"), async (req, res) => {
   await Complaint.create({
     category: req.body.category,
     description: req.body.description,
-    image: req.file.filename
+    image: req.file ? req.file.filename : undefined,
+    location: req.body.location
   });
 
   res.redirect("/complaints");
 });
 
 app.get("/complaints", async (req, res) => {
+  // Replace 'Vanshika' with the actual logged-in user if you have authentication
   const myComplaints = await Complaint.find({ createdBy: "Vanshika" });
   const otherComplaints = await Complaint.find({ createdBy: { $ne: "Vanshika" } });
-
   res.render("pages/complaint", {
     myComplaints,
     otherComplaints,
@@ -62,6 +63,11 @@ app.get("/complaints", async (req, res) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
+// FAQ route
+app.get("/faq", (req, res) => {
+  res.render("pages/faq", { activePage: "faq" });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

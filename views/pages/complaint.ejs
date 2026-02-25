@@ -1,272 +1,148 @@
 <% layout('/layouts/boilerplate.ejs') -%>
-<!-- <h1>Complaints</h1>
 
-<section>
-  <h2>My Complaints</h2>
-
-  <% if (myComplaints.length === 0) { %>
-    <p>No complaints reported yet.</p>
-  <% } %>
-
-  <% myComplaints.forEach(c => { %>
-    <div class="complaint-card">
-      <strong><%= c.category %></strong>
-      <p><%= c.description %></p>
-
-      <% if (c.image) { %>
-        <img src="/uploads/<%= c.image %>" width="200">
-      <% } %>
-    </div>
-  <% }) %>
+<!-- Page Header -->
+<section class="page-header">
+    <h1>Complaints</h1>
+    <p>Track and manage all reported issues</p>
 </section>
+
+<!-- My Complaints Section -->
+<h2 class="section-title">My Complaints</h2>
+<div class="main-content">
+    <div class="row">
+        <% if (myComplaints.length === 0) { %>
+        <div class="no-complaints">
+            <p>No complaints reported yet.</p>
+        </div>
+        <% } %>
+        <% myComplaints.forEach(c => { %>
+        <div class="col-md-6 col-lg-4">
+            <div class="complaint-card">
+                <img src="<%= c.image ? ('/uploads/' + c.image) : 'https://images.unsplash.com/photo-1581578731117-e0a820a4b291?w=400&q=80' %>" class="card-img-top" alt="<%= c.category %>">
+                <div class="card-body">
+                    <span class="category-badge">
+                        <% const cat = c.category ? c.category.trim().toLowerCase() : ''; %>
+                        <% if (cat === 'water leakage') { %>
+                            <i class="fas fa-tint"></i>
+                        <% } else if (cat === 'garbage dump') { %>
+                            <i class="fas fa-trash"></i>
+                        <% } else if (cat === 'street light outage') { %>
+                            <i class="fas fa-lightbulb"></i>
+                        <% } else if (cat === 'pothole') { %>
+                            <i class="fas fa-road"></i>
+                        <% } else if (cat === 'drainage / sewage') { %>
+                            <i class="fas fa-tint"></i>
+                        <% } else { %>
+                            <i class="fas fa-clipboard-list"></i>
+                        <% } %>
+                        <%= c.category %>
+                    </span>
+                    <p class="complaint-description">
+                        <%= c.description %>
+                    </p>
+                    <div class="complaint-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span><%= c.location || 'Location not specified' %></span>
+                    </div>
+                    <div class="status-tracker">
+                        <div class="status-tracker-title">
+                            <i class="fas fa-shipping-fast"></i> Complaint Status
+                        </div>
+                        <div class="status-steps">
+                            <div class="status-step <%= c.status === 'Assigned' || c.status === 'In Progress' || c.status === 'Completed' ? 'completed' : '' %>">
+                                <div class="step-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <span class="step-label">Assigned</span>
+                            </div>
+                            <div class="status-step <%= c.status === 'In Progress' || c.status === 'Completed' ? 'active' : '' %>">
+                                <div class="step-icon">
+                                    <i class="fas fa-tools"></i>
+                                </div>
+                                <span class="step-label">In Progress</span>
+                            </div>
+                            <div class="status-step <%= c.status === 'Completed' ? 'completed' : '' %>">
+                                <div class="step-icon">
+                                    <i class="fas fa-check-double"></i>
+                                </div>
+                                <span class="step-label">Completed</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="complaint-meta">
+                        <span><i class="far fa-calendar-alt"></i> 
+                            <%= c.createdAt ? new Date(c.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Date not specified' %>
+                            <span style="margin-left:8px;"><i class="far fa-clock"></i> <%= c.createdAt ? new Date(c.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'Time not specified' %></span>
+                        </span>
+                        <span class="status-badge <%= c.status ? c.status.replace(' ', '-').toLowerCase() : '' %>">
+                            <i class="fas fa-circle" style="font-size: 6px;"></i> <%= c.status || 'Status Unknown' %>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }) %>
+    </div>
+</div>
 
 <hr>
 
-<section>
-  <h2>Complaints by Others</h2>
-
-  <% otherComplaints.forEach(c => { %>
-    <div class="complaint-card">
-      <strong><%= c.category %></strong>
-      <p><%= c.description %></p>
-
-      <% if (c.image) { %>
-        <img src="/uploads/<%= c.image %>" width="200">
-      <% } %>
-    </div>
-  <% }) %>
-</section> -->
-
-    <!-- Page Header -->
-    <section class="page-header">
-        <h1>My Complaints</h1>
-        <p>Track and manage your reported issues</p>
-    </section>
-
-    <!-- Main Content -->
-    <div class="main-content">
-        
-        <!-- ==================== MY COMPLAINTS SECTION ==================== -->
-        <h2 class="section-title">
-            <i class="fas fa-clipboard-list"></i>
-            My Complaints
-            <span class="badge-custom">3 Active</span>
-        </h2>
-        
-        <div class="row">
-            <!-- My Complaint Card 1 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="complaint-card">
-                    <img src="https://images.unsplash.com/photo-1581578731117-e0a820a4b291?w=400&q=80" 
-                         class="card-img-top" alt="Water Leakage">
-                    <div class="card-body">
-                        <span class="category-badge water-leakage">
-                            <i class="fas fa-faucet-drip"></i> Water Leakage
-                        </span>
-                        
-                        <p class="complaint-description">
-                            Water pipe is leaking near the main entrance of the society. Water is accumulating on the road causing inconvenience to pedestrians.
-                        </p>
-                        
-                        <div class="complaint-location">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>Sector 15, Main Road, Near Park Entrance</span>
-                        </div>
-                        
-                        <!-- Status Tracker - Flipkart Style -->
-                        <div class="status-tracker">
-                            <div class="status-tracker-title">
-                                <i class="fas fa-shipping-fast"></i> Complaint Status
-                            </div>
-                            <div class="status-steps">
-                                <div class="status-step completed">
-                                    <div class="step-icon">
-                                        <i class="fas fa-check"></i>
-                                    </div>
-                                    <span class="step-label">Assigned</span>
-                                </div>
-                                <div class="status-step active">
-                                    <div class="step-icon">
-                                        <i class="fas fa-tools"></i>
-                                    </div>
-                                    <span class="step-label">In Progress</span>
-                                </div>
-                                <div class="status-step">
-                                    <div class="step-icon">
-                                        <i class="fas fa-check-double"></i>
-                                    </div>
-                                    <span class="step-label">Completed</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="complaint-meta">
-                            <span><i class="far fa-calendar-alt"></i> Dec 15, 2024</span>
-                            <span class="status-badge in-progress">
-                                <i class="fas fa-circle" style="font-size: 6px;"></i> In Progress
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- My Complaint Card 2 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="complaint-card">
-                    <img src="https://images.unsplash.com/photo-1582268611958-ebfd163fce3d?w=400&q=80" 
-                         class="card-img-top" alt="Garbage">
-                    <div class="card-body">
-                        <span class="category-badge garbage">
-                            <i class="fas fa-trash-alt"></i> Garbage
-                        </span>
-                        
-                        <p class="complaint-description">
-                            Large garbage pile has been accumulating near the community hall for the past 3 days. It's creating bad smell and attracting insects.
-                        </p>
-                        
-                        <div class="complaint-location">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>Near Community Hall, Block A</span>
-                        </div>
-                        
-                        <!-- Status Tracker -->
-                        <div class="status-tracker">
-                            <div class="status-tracker-title">
-                                <i class="fas fa-shipping-fast"></i> Complaint Status
-                            </div>
-                            <div class="status-steps">
-                                <div class="status-step completed">
-                                    <div class="step-icon">
-                                        <i class="fas fa-check"></i>
-                                    </div>
-                                    <span class="step-label">Assigned</span>
-                                </div>
-                                <div class="status-step completed">
-                                    <div class="step-icon">
-                                        <i class="fas fa-check"></i>
-                                    </div>
-                                    <span class="step-label">In Progress</span>
-                                </div>
-                                <div class="status-step active">
-                                    <div class="step-icon">
-                                        <i class="fas fa-spinner fa-spin"></i>
-                                    </div>
-                                    <span class="step-label">Completed</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="complaint-meta">
-                            <span><i class="far fa-calendar-alt"></i> Dec 12, 2024</span>
-                            <span class="status-badge completed">
-                                <i class="fas fa-check-circle"></i> Completed
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- My Complaint Card 3 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="complaint-card">
-                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85c64e?w=400&q=80" 
-                         class="card-img-top" alt="Pothole">
-                    <div class="card-body">
-                        <span class="category-badge pothole">
-                            <i class="fas fa-exclamation-triangle"></i> Pothole
-                        </span>
-                        
-                        <p class="complaint-description">
-                            Dangerous pothole on the main road causing accidents. Multiple vehicles have damaged their tires. Needs immediate repair.
-                        </p>
-                        
-                        <div class="complaint-location">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span
-                                                <!-- Status Tracker -->
-                    <div class="status-tracker">
-                        <div class="status-tracker-title">
-                            <i class="fas fa-shipping-fast"></i> Complaint Status
-                        </div>
-                        <div class="status-steps">
-                            <div class="status-step completed">
-                                <div class="step-icon">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <span class="step-label">Assigned</span>
-                            </div>
-                            <div class="status-step">
-                                <div class="step-icon">
-                                    <i class="fas fa-tools"></i>
-                                </div>
-                                <span class="step-label">In Progress</span>
-                            </div>
-                            <div class="status-step">
-                                <div class="step-icon">
-                                    <i class="fas fa-check-double"></i>
-                                </div>
-                                <span class="step-label">Completed</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="complaint-meta">
-                        <span><i class="far fa-calendar-alt"></i> Dec 10, 2024</span>
-                        <span class="status-badge assigned">
-                            <i class="fas fa-circle" style="font-size: 6px;"></i> Assigned
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==================== OTHER COMPLAINTS SECTION ==================== -->
-    <h2 class="section-title" style="margin-top: 40px;">
-        <i class="fas fa-globe"></i>
-        Other Complaints
-        <span class="badge-custom" style="background: var(--gradient-primary);">View All</span>
-    </h2>
-    
+<!-- Complaints by Others Section -->
+<h2 class="section-title">Complaints by Others</h2>
+<div class="main-content">
     <div class="row">
-        <!-- Other Complaint Card 1 -->
+        <% if (otherComplaints.length === 0) { %>
+        <div class="no-complaints">
+            <p>No complaints by others yet.</p>
+        </div>
+        <% } %>
+        <% otherComplaints.forEach(c => { %>
         <div class="col-md-6 col-lg-4">
             <div class="complaint-card">
-                <img src="https://images.unsplash.com/photo-1561651823-34feb02250e4?w=400&q=80" 
-                     class="card-img-top" alt="Street Light">
+                <img src="<%= c.image ? ('/uploads/' + c.image) : 'https://images.unsplash.com/photo-1581578731117-e0a820a4b291?w=400&q=80' %>" class="card-img-top" alt="<%= c.category %>">
                 <div class="card-body">
-                    <span class="category-badge street-light">
-                        <i class="fas fa-lightbulb"></i> Street Light
+                    <span class="category-badge">
+                        <% const cat = c.category ? c.category.trim().toLowerCase() : ''; %>
+                        <% if (cat === 'water leakage') { %>
+                            <i class="fas fa-tint"></i>
+                        <% } else if (cat === 'garbage dump') { %>
+                            <i class="fas fa-trash"></i>
+                        <% } else if (cat === 'street light outage') { %>
+                            <i class="fas fa-lightbulb"></i>
+                        <% } else if (cat === 'pothole') { %>
+                            <i class="fas fa-road"></i>
+                        <% } else if (cat === 'drainage / sewage') { %>
+                            <i class="fas fa-tint"></i>
+                        <% } else { %>
+                            <i class="fas fa-clipboard-list"></i>
+                        <% } %>
+                        <%= c.category %>
                     </span>
-                    
                     <p class="complaint-description">
-                        Street light not working in the entire lane. It's very dangerous for pedestrians especially during night hours.
+                        <%= c.description %>
                     </p>
-                    
                     <div class="complaint-location">
                         <i class="fas fa-map-marker-alt"></i>
-                        <span>Lane 3, Sector 8, Residential Area</span>
+                        <span><%= c.location || 'Location not specified' %></span>
                     </div>
-                    
-                    <!-- Status Tracker -->
                     <div class="status-tracker">
                         <div class="status-tracker-title">
                             <i class="fas fa-shipping-fast"></i> Complaint Status
                         </div>
                         <div class="status-steps">
-                            <div class="status-step completed">
+                            <div class="status-step <%= c.status === 'Assigned' || c.status === 'In Progress' || c.status === 'Completed' ? 'completed' : '' %>">
                                 <div class="step-icon">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <span class="step-label">Assigned</span>
                             </div>
-                            <div class="status-step active">
+                            <div class="status-step <%= c.status === 'In Progress' || c.status === 'Completed' ? 'active' : '' %>">
                                 <div class="step-icon">
                                     <i class="fas fa-tools"></i>
                                 </div>
                                 <span class="step-label">In Progress</span>
                             </div>
-                            <div class="status-step">
+                            <div class="status-step <%= c.status === 'Completed' ? 'completed' : '' %>">
                                 <div class="step-icon">
                                     <i class="fas fa-check-double"></i>
                                 </div>
@@ -274,298 +150,20 @@
                             </div>
                         </div>
                     </div>
-                    
                     <div class="complaint-meta">
-                        <span class="created-by">
-                            <i class="fas fa-user"></i> Rahul Sharma
+                        <span><i class="far fa-calendar-alt"></i> 
+                            <%= c.createdAt ? new Date(c.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Date not specified' %>
+                            <span style="margin-left:8px;"><i class="far fa-clock"></i> <%= c.createdAt ? new Date(c.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'Time not specified' %></span>
                         </span>
-                        <span><i class="far fa-calendar-alt"></i> Dec 14, 2024</span>
+                        <span class="status-badge <%= c.status ? c.status.replace(' ', '-').toLowerCase() : '' %>">
+                            <i class="fas fa-circle" style="font-size: 6px;"></i> <%= c.status || 'Status Unknown' %>
+                        </span>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <!-- Other Complaint Card 2 -->
-        <div class="col-md-6 col-lg-4">
-            <div class="complaint-card">
-                <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=400&q=80" 
-                     class="card-img-top" alt="Drainage">
-                <div class="card-body">
-                    <span class="category-badge drainage">
-                        <i class="fas fa-water"></i> Drainage
-                    </span>
-                    
-                    <p class="complaint-description">
-                        Drainage pipe is blocked and water is overflowing. Bad smell is spreading in the entire area.
-                    </p>
-                    
-                    <div class="complaint-location">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Near Market, Sector 5</span>
-                    </div>
-                    
-                    <!-- Status Tracker -->
-                    <div class="status-tracker">
-                        <div class="status-tracker-title">
-                            <i class="fas fa-shipping-fast"></i> Complaint Status
-                        </div>
-                        <div class="status-steps">
-                            <div class="status-step completed">
-                                <div class="step-icon">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <span class="step-label">Assigned</span>
-                            </div>
-                            <div class="status-step completed">
-                                <div class="step-icon">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <span class="step-label">In Progress</span>
-                            </div>
-                            <div class">
-                                <div="status-step active class="step-icon">
-                                    <i class="fas fa-spinner fa-spin"></i>
-                                </div>
-                                <span class="step-label">Completed</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="complaint-meta">
-                        <span class="created-by">
-                            <i class="fas fa-user"></i> Priya Singh
-                        </span>
-                        <span><i class="far fa-calendar-alt"></i> Dec 13, 2024</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Other Complaint Card 3 -->
-        <div class="col-md-6 col-lg-4">
-            <div class="complaint-card">
-                <img src="https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=400&q=80" 
-                     class="card-img-top" alt="Garbage">
-                <div class="card-body">
-                    <span class="category-badge garbage">
-                        <i class="fas fa-trash-alt"></i> Garbage
-                    </span>
-                    
-                    <p class="complaint-description">
-                        Waste bins are overflowing and garbage is scattered on the road. No one has cleaned it for a week.
-                    </p>
-                    
-                    <div class="complaint-location">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Block C, Sector 10, Near School</span>
-                    </div>
-                    
-                    <!-- Status Tracker -->
-                    <div class="status-tracker">
-                        <div class="status-tracker-title">
-                            <i class="fas fa-shipping-fast"></i> Complaint Status
-                        </div>
-                        <div class="status-steps">
-                            <div class="status-step completed">
-                                <div class="step-icon">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <span class="step-label">Assigned</span>
-                            </div>
-                            <div class="status-step">
-                                <div class="step-icon">
-                                    <i class="fas fa-tools"></i>
-                                </div>
-                                <span class="step-label">In Progress</span>
-                            </div>
-                            <div class="status-step">
-                                <div class="step-icon">
-                                    <i class="fas fa-check-double"></i>
-                                </div>
-                                <span class="step-label">Completed</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="complaint-meta">
-                        <span class="created-by">
-                            <i class="fas fa-user"></i> Amit Kumar
-                        </span>
-                        <span><i class="far fa-calendar-alt"></i> Dec 11, 2024</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Other Complaint Card 4 -->
-        <div class="col-md-6 col-lg-4">
-            <div class="complaint-card">
-                <img src="https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=400&q=80" 
-                     class="card-img-top" alt="Water Leakage">
-                <div class="card-body">
-                    <span class="category-badge water-leakage">
-                        <i class="fas fa-faucet-drip"></i> Water Leakage
-                    </span>
-                    
-                    <p class="complaint-description">
-                        Water is leaking from the main pipeline for the past 4 days. Huge water wastage and road is slippery.
-                    </p>
-                    
-                    <div class="complaint-location">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Near Metro Station, Sector 18</span>
-                    </div>
-                    
-                    <!-- Status Tracker -->
-                    <div class="status-tracker">
-                        <div class="status-tracker-title">
-                            <i class="fas fa-shipping-fast"></i> Complaint Status
-                        </div>
-                        <div class="status-steps">
-                            <div class="status-step completed">
-                                <div class="step-icon">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <span class="step-label">Assigned</span>
-                            </div>
-                            <div class="status-step active">
-                                <div class="step-icon">
-                                    <i class="fas fa-tools"></i>
-                                </div>
-                                <span class="step-label">In Progress</span>
-                            </div>
-                            <div class="status-step">
-                                <div class="step-icon">
-                                    <i class="fas fa-check-double"></i>
-                                </div>
-                                <span class="step-label">Completed</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="complaint-meta">
-                        <span class="created-by">
-                            <i class="fas fa-user"></i> Sneha Reddy
-                        </span>
-                        <span><i class="far fa-calendar-alt"></i> Dec 9, 2024</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Other Complaint Card 5 -->
-        <div class="col-md-6 col-lg-4">
-            <div class="complaint-card">
-                <img src="https://images.unsplash.com/photo-1574256295188-4ae5e9c0e3e5?w=400&q=80" 
-                     class="card-img-top" alt="Pothole">
-                <div class="card-body">
-                    <span class="category-badge pothole">
-                        <i class="fas fa-exclamation-triangle"></i> Pothole
-                    </span>
-                    
-                    <p class="complaint-description">
-                        Big pothole near the traffic signal. Many bikes have fallen. Very dangerous for two-wheeler riders.
-                    </p>
-                    
-                    <div class="complaint-location">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Traffic Signal, Sector 25</span>
-                    </div>
-                    
-                    <!-- Status Tracker -->
-                    <div class="status-tracker">
-                        <div class="status-tracker-title">
-                            <i class="fas fa-shipping-fast"></i> Complaint Status
-                        </div>
-                        <div class="status-steps">
-                            <div class="status-step completed">
-                                <div class="step-icon">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <span class="step-label">Assigned</span>
-                            </div>
-                            <div class="status-step completed">
-                                <div class="step-icon">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <span class="step-label">In Progress</span>
-                            </div>
-                            <div class="status-step completed">
-                                <div class="step-icon">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <span class="step-label">Completed</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="complaint-meta">
-                        <span class="created-by">
-                            <i class="fas fa-user"></i> Vikram Patel
-                        </span>
-                        <span><i class="far fa-calendar-alt"></i> Dec 8, 2024</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Other Complaint Card 6 -->
-        <div class="col-md-6 col-lg-4">
-            <div class="complaint-card">
-                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&q=80" 
-                     class="card-img-top" alt="Street Light">
-                <div class="card-body">
-                    <span class="category-badge street-light">
-                        <i class="fas fa-lightbulb"></i> Street Light
-                    </span>
-                    
-                    <p class="complaint-description">
-                        Multiple street lights are not working in the park area. It's unsafe for people walking in the evening.
-                    </p>
-                    
-                    <div class="complaint-location">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Central Park, Sector 12</span>
-                    </div>
-                    
-                    <!-- Status Tracker -->
-                    <div class="status-tracker">
-                        <div class="status-tracker-title">
-                            <i class="fas fa-shipping-fast"></i> Complaint Status
-                        </div>
-                        <div class="status-steps">
-                            <div class="status-step completed">
-                                <div class="step-icon">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <span class="step-label">Assigned</span>
-                            </div>
-                            <div class="status-step">
-                                <div class="step-icon">
-                                    <i class="fas fa-tools"></i>
-                                </div>
-                                <span class="step-label">In Progress</span>
-                            </div>
-                            <div class="status-step">
-                                <div class="step-icon">
-                                    <i class="fas fa-check-double"></i>
-                                </div>
-                                <span class="step-label">Completed</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="complaint-meta">
-                        <span class="created-by">
-                            <i class="fas fa-user"></i> Anjali Gupta
-                        </span>
-                        <span><i class="far fa-calendar-alt"></i> Dec 7, 2024</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <% }) %>
     </div>
-
 </div>
 
 <!-- Floating Report Button -->

@@ -12,6 +12,10 @@ const complaintSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  location: {
+    type: String,
+    required: true
+  },
   status: {
     type: String,
     default: "Assigned"
