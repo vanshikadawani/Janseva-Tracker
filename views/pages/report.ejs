@@ -6,6 +6,30 @@
     <p>Help your city improve — report problems, attach evidence, and track resolution in real time.</p>
 </section>
 
+<% if (typeof duplicate !== 'undefined' && duplicate) { %>
+<div class="duplicate-warning" style="background: #fff3cd; border: 1px solid #ffc107; padding: 20px; margin: 20px; border-radius: 8px;">
+    <h3 style="color: #856404; margin-top: 0;">⚠️ Potential Duplicate Detected</h3>
+    <p><%= duplicate.message %></p>
+    <p><strong>Similarity:</strong> <%= duplicate.similarity %>%</p>
+    <% if (duplicate.matchingComplaint) { %>
+    <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 10px;">
+        <p><strong>Similar Complaint:</strong></p>
+        <p><strong>Category:</strong> <%= duplicate.matchingComplaint.category %></p>
+        <p><strong>Description:</strong> <%= duplicate.matchingComplaint.description %></p>
+        <p><strong>Location:</strong> <%= duplicate.matchingComplaint.location %></p>
+        <a href="/complaints" class="btn btn-info" style="display: inline-block; padding: 8px 16px; background: #17a2b8; color: white; text-decoration: none; border-radius: 4px;">View Existing Complaint</a>
+    </div>
+    <% } %>
+    <p style="margin-top: 15px;"><em>You can still submit this complaint if you believe it's different.</em></p>
+</div>
+<% } %>
+
+<% if (typeof error !== 'undefined' && error) { %>
+<div class="error-message" style="background: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; margin: 20px; border-radius: 8px; color: #721c24;">
+    <%= error %>
+</div>
+<% } %>
+
 <form 
   action="/report" 
   method="POST" 
@@ -18,30 +42,41 @@
     <div class="section-label">Select Issue Type</div>
 
     <!-- Hidden category input -->
-    <input type="hidden" name="category" id="categoryInput" value="water">
+    <input type="hidden" name="category" id="categoryInput" value="Water Leakage">
 
     <div class="issue-types">
-      <div class="issue-card selected" data-type="water">
+      <div class="issue-card selected" data-type="Water Leakage">
         <div class="card-img">💧</div>
         <div class="card-label">Water Leakage</div>
       </div>
-      <div class="issue-card" data-type="garbage">
+      <div class="issue-card" data-type="Garbage">
         <div class="card-img">🗑️</div>
         <div class="card-label">Garbage Dump</div>
       </div>
-      <div class="issue-card" data-type="streetlight">
+      <div class="issue-card" data-type="Streetlight Issue">
         <div class="card-img">💡</div>
         <div class="card-label">Street Light Outage</div>
       </div>
-      <div class="issue-card" data-type="pothole">
+      <div class="issue-card" data-type="Road Damage">
         <div class="card-img">🕳️</div>
         <div class="card-label">Pothole</div>
       </div>
-      <div class="issue-card" data-type="drainage">
+      <div class="issue-card" data-type="Drainage">
         <div class="card-img">🚰</div>
         <div class="card-label">Drainage / Sewage</div>
       </div>
     </div>
+
+    <script>
+    // Update category when card is clicked
+    document.querySelectorAll('.issue-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.issue-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        document.getElementById('categoryInput').value = card.dataset.type;
+      });
+    });
+    </script>
 
     <div class="form-grid">
 

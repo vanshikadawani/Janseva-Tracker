@@ -20,23 +20,37 @@
             <div class="complaint-card">
                 <img src="<%= c.image ? ('/uploads/' + c.image) : 'https://images.unsplash.com/photo-1581578731117-e0a820a4b291?w=400&q=80' %>" class="card-img-top" alt="<%= c.category %>">
                 <div class="card-body">
+                    <!-- AI Priority Score Badge -->
+                    <div class="priority-badge priority-<%= c.aiSeverityLevel %>">
+                        <span class="priority-score"><%= c.priorityScore || 50 %>/100</span>
+                        <span class="priority-label"><%= c.aiSeverityLevel || 'medium' %></span>
+                    </div>
+                    
                     <span class="category-badge">
                         <% const cat = c.category ? c.category.trim().toLowerCase() : ''; %>
                         <% if (cat === 'water leakage') { %>
                             <i class="fas fa-tint"></i>
-                        <% } else if (cat === 'garbage dump') { %>
+                        <% } else if (cat === 'garbage dump' || cat === 'garbage') { %>
                             <i class="fas fa-trash"></i>
-                        <% } else if (cat === 'street light outage') { %>
+                        <% } else if (cat === 'street light outage' || cat === 'streetlight issue') { %>
                             <i class="fas fa-lightbulb"></i>
-                        <% } else if (cat === 'pothole') { %>
+                        <% } else if (cat === 'pothole' || cat === 'road damage') { %>
                             <i class="fas fa-road"></i>
-                        <% } else if (cat === 'drainage / sewage') { %>
+                        <% } else if (cat === 'drainage / sewage' || cat === 'drainage') { %>
                             <i class="fas fa-tint"></i>
                         <% } else { %>
                             <i class="fas fa-clipboard-list"></i>
                         <% } %>
                         <%= c.category %>
                     </span>
+                    
+                    <!-- AI Classification Confidence -->
+                    <% if (c.textClassification && c.textClassification.confidence) { %>
+                    <div class="ai-confidence">
+                        <small>AI Confidence: <%= Math.round(c.textClassification.confidence * 100) %>%</small>
+                    </div>
+                    <% } %>
+                    
                     <p class="complaint-description">
                         <%= c.description %>
                     </p>
@@ -44,6 +58,25 @@
                         <i class="fas fa-map-marker-alt"></i>
                         <span><%= c.location || 'Location not specified' %></span>
                     </div>
+                    
+                    <!-- Priority Breakdown -->
+                    <% if (c.priorityBreakdown) { %>
+                    <div class="priority-breakdown">
+                        <small>
+                            Count: <%= c.priorityBreakdown.complaintCountScore || 0 %> | 
+                            Time: <%= c.priorityBreakdown.timePendingScore || 0 %> | 
+                            Area: <%= c.priorityBreakdown.areaWeightScore || 0 %>
+                        </small>
+                    </div>
+                    <% } %>
+                    
+                    <!-- Duplicate Warning -->
+                    <% if (c.aiDuplicateCheck && c.aiDuplicateCheck.isDuplicate) { %>
+                    <div class="duplicate-warning">
+                        <small>⚠️ Similar complaint found (<%= c.aiDuplicateCheck.similarity %>% match)</small>
+                    </div>
+                    <% } %>
+                    
                     <div class="status-tracker">
                         <div class="status-tracker-title">
                             <i class="fas fa-shipping-fast"></i> Complaint Status
@@ -101,23 +134,37 @@
             <div class="complaint-card">
                 <img src="<%= c.image ? ('/uploads/' + c.image) : 'https://images.unsplash.com/photo-1581578731117-e0a820a4b291?w=400&q=80' %>" class="card-img-top" alt="<%= c.category %>">
                 <div class="card-body">
+                    <!-- AI Priority Score Badge -->
+                    <div class="priority-badge priority-<%= c.aiSeverityLevel %>">
+                        <span class="priority-score"><%= c.priorityScore || 50 %>/100</span>
+                        <span class="priority-label"><%= c.aiSeverityLevel || 'medium' %></span>
+                    </div>
+                    
                     <span class="category-badge">
                         <% const cat = c.category ? c.category.trim().toLowerCase() : ''; %>
                         <% if (cat === 'water leakage') { %>
                             <i class="fas fa-tint"></i>
-                        <% } else if (cat === 'garbage dump') { %>
+                        <% } else if (cat === 'garbage dump' || cat === 'garbage') { %>
                             <i class="fas fa-trash"></i>
-                        <% } else if (cat === 'street light outage') { %>
+                        <% } else if (cat === 'street light outage' || cat === 'streetlight issue') { %>
                             <i class="fas fa-lightbulb"></i>
-                        <% } else if (cat === 'pothole') { %>
+                        <% } else if (cat === 'pothole' || cat === 'road damage') { %>
                             <i class="fas fa-road"></i>
-                        <% } else if (cat === 'drainage / sewage') { %>
+                        <% } else if (cat === 'drainage / sewage' || cat === 'drainage') { %>
                             <i class="fas fa-tint"></i>
                         <% } else { %>
                             <i class="fas fa-clipboard-list"></i>
                         <% } %>
                         <%= c.category %>
                     </span>
+                    
+                    <!-- AI Classification Confidence -->
+                    <% if (c.textClassification && c.textClassification.confidence) { %>
+                    <div class="ai-confidence">
+                        <small>AI Confidence: <%= Math.round(c.textClassification.confidence * 100) %>%</small>
+                    </div>
+                    <% } %>
+                    
                     <p class="complaint-description">
                         <%= c.description %>
                     </p>
@@ -125,6 +172,25 @@
                         <i class="fas fa-map-marker-alt"></i>
                         <span><%= c.location || 'Location not specified' %></span>
                     </div>
+                    
+                    <!-- Priority Breakdown -->
+                    <% if (c.priorityBreakdown) { %>
+                    <div class="priority-breakdown">
+                        <small>
+                            Count: <%= c.priorityBreakdown.complaintCountScore || 0 %> | 
+                            Time: <%= c.priorityBreakdown.timePendingScore || 0 %> | 
+                            Area: <%= c.priorityBreakdown.areaWeightScore || 0 %>
+                        </small>
+                    </div>
+                    <% } %>
+                    
+                    <!-- Duplicate Warning -->
+                    <% if (c.aiDuplicateCheck && c.aiDuplicateCheck.isDuplicate) { %>
+                    <div class="duplicate-warning">
+                        <small>⚠️ Similar complaint found (<%= c.aiDuplicateCheck.similarity %>% match)</small>
+                    </div>
+                    <% } %>
+                    
                     <div class="status-tracker">
                         <div class="status-tracker-title">
                             <i class="fas fa-shipping-fast"></i> Complaint Status
@@ -173,3 +239,77 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+/* Priority Badge Styles */
+.priority-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.priority-critical {
+    background: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.priority-high {
+    background: #fef3c7;
+    color: #d97706;
+    border: 1px solid #fde68a;
+}
+
+.priority-medium {
+    background: #dbeafe;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+}
+
+.priority-low {
+    background: #dcfce7;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+}
+
+.priority-score {
+    font-size: 14px;
+}
+
+.priority-label {
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+}
+
+/* AI Confidence */
+.ai-confidence {
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+/* Priority Breakdown */
+.priority-breakdown {
+    background: #f3f4f6;
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    font-size: 11px;
+    color: #6b7280;
+}
+
+/* Duplicate Warning */
+.duplicate-warning {
+    background: #fef3c7;
+    color: #92400e;
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+</style>

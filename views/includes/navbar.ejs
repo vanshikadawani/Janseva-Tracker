@@ -14,6 +14,27 @@
         </ul>
     </div>
     <div class="nav-login">
-        <a href="#login" class="cta-button" style="color: white;">Login</a>
+        <span id="userInfo" style="display:none; color: white; margin-right: 10px;"></span>
+        <a href="/login" id="loginBtn" class="cta-button" style="color: white;">Login</a>
+        <a href="/logout" id="logoutBtn" class="cta-button" style="color: white; display:none;">Logout</a>
     </div>
 </nav>
+
+<script>
+function checkAuth() {
+    const token = document.cookie.split('; ').find(row => row.startsWith('token='));
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userInfo = document.getElementById('userInfo');
+    
+    if (token) {
+        loginBtn.style.display = 'none';
+        logoutBtn.style.display = 'inline-block';
+    } else {
+        loginBtn.style.display = 'inline-block';
+        logoutBtn.style.display = 'none';
+    }
+}
+
+checkAuth();
+</script>
