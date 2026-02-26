@@ -1,24 +1,43 @@
 require("dotenv").config();
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
 const express = require("express");
 const app = express();
+require("dotenv").config();
 const multer = require("multer");
 const path = require("path");
 const ejsMate = require("ejs-mate");
 const mongoose = require("mongoose");
 const Complaint = require("./models/complaint");
 
+
+
+ //// yha se authentication ka codee ka require
+
+const authRouter = require("./routes/auth.routes")
+const cookieParser = require("cookie-parser")
+
+// const app =express()
+
+app.use(express.json())
+app.use(cookieParser())
+
+app.use("/api/auth", authRouter)
+
+
+/////// th tk athentication hi
+
+
 app.engine("ejs", ejsMate);   // ⭐ THIS LINE WAS MISSING
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(__dirname, "../views"));
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch(err => console.log(err));
+// mongoose.connect(process.env.MONGO_URI)
+//   .then(() => console.log("MongoDB connected"))
+//   .catch(err => console.log(err));
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -68,6 +87,8 @@ app.get("/faq", (req, res) => {
   res.render("pages/faq", { activePage: "faq" });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+
+module.exports = app
+// app.listen(PORT, () => {
+// console.log(`Server running on port ${PORT}`);
+// });
