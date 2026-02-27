@@ -20,7 +20,14 @@ async function connectToDB(){
         console.log("connected to DB")
         return mongoose
     } catch (err) {
-        console.log("MongoDB connection error (AI features will be disabled):", err.message)
+        // Log full error for debugging
+        console.error("MongoDB connection error (AI features will be disabled):", err);
+
+        // Print a redacted version of the connection string to help debugging
+        const rawUri = process.env.MONGO_URL || '';
+        const redacted = rawUri.replace(/:[^@]+@/, ':*****@');
+        console.log("MONGO_URL (redacted):", redacted || 'not set');
+
         console.log("Server will run without database - for full functionality, set up MongoDB Atlas")
         return null
     }

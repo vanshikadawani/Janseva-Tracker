@@ -1,0 +1,52 @@
+<% include ../includes/navbar.ejs %>
+<div class="container mt-4">
+  <h1>Department Dashboard - <span id="dept-name"></span></h1>
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <label>Status filter</label>
+      <select id="statusFilter" class="form-select">
+        <option value="">All</option>
+        <option value="Pending">Pending</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Resolved">Resolved</option>
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label>Sort by priority</label>
+      <select id="prioritySort" class="form-select">
+        <option value="">None</option>
+        <option value="asc">Low ➜ High</option>
+        <option value="desc">High ➜ Low</option>
+      </select>
+    </div>
+  </div>
+
+  <table class="table table-hover" id="deptComplaintsTable">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Priority</th>
+        <th>Location</th>
+        <th>Deadline</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<div class="modal fade" id="mapModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Complaint Location</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" style="height:500px;" id="mapModalBody"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY"></script>
+<script src="/js/department-dashboard.js"></script>

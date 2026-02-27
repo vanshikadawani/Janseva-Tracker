@@ -18,10 +18,18 @@ const express = require("express");
 const app = express();
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 const ejsMate = require("ejs-mate");  // EJS template engine helper
 const mongoose = require("mongoose"); // MongoDB ODM (used for schema reference)
 const session = require("express-session");
 const flash = require("connect-flash");
+
+// ensure uploads directory exists
+const uploadsDir = path.join(__dirname, "..", "uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+  console.log("Created missing uploads directory:", uploadsDir);
+}
 
 // Import routes
 const authRouter = require("./routes/auth.routes");
@@ -211,6 +219,10 @@ app.get("/complaints", async (req, res) => {
 app.get("/faq", (req, res) => {
   res.render("pages/faq", { activePage: "faq" });
 });
+
+// app.get("/staff/dashboard", (req, res) => {
+//     res.render("muncipal/home", { activePage: 'home' });
+// });
 
 // Export app for server.js
 module.exports = app

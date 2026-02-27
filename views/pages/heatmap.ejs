@@ -1,0 +1,19 @@
+<% include ../includes/navbar.ejs %>
+<div class="container mt-4">
+  <h1>Complaint Heatmap</h1>
+  <div class="mb-3">
+    <label>Category Filter</label>
+    <select id="categoryFilter" class="form-select">
+      <option value="">All</option>
+      <option value="Garbage">Garbage</option>
+      <option value="Road Damage">Road Damage</option>
+      <option value="Streetlight Issue">Streetlight Issue</option>
+      <option value="Water Leakage">Water Leakage</option>
+      <option value="Drainage">Drainage</option>
+    </select>
+  </div>
+  <div id="heatmapMap" style="height:600px;"></div>
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=visualization"></script>
+<script src="/js/heatmap.js"></script>
